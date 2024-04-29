@@ -17,7 +17,7 @@ const Login = () => {
     navigation.navigate('SignUp');
   };
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View
         style={{
           alignItems: 'center',
@@ -32,7 +32,7 @@ const Login = () => {
         </Text>
       </View>
 
-      <View style={{marginVertical: 50, rowGap: 20}}>
+      <View style={{rowGap: 20}}>
         <View>
           <Text style={styles.label}>Your email</Text>
           <TextInput style={styles.textInput} />
@@ -64,7 +64,12 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-  container: {flex: 1, paddingHorizontal: 20, paddingVertical: 50},
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 80,
+    rowGap: 80,
+  },
   button: {
     backgroundColor: '#20a090',
     borderRadius: 10,

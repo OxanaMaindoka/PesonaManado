@@ -47,7 +47,7 @@ const TourList = ({route}) => {
                 <Text style={{color: 'black', flexWrap: 'wrap', flex: 1}}>
                   Likupang Timur, Minahasa Utara
                 </Text>
-                </View>
+              </View>
               <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
                 <Image
                   source={require('../../../assets/images/star.png')}
