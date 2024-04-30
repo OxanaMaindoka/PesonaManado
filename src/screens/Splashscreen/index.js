@@ -1,13 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {useEffect} from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const Splashscreen = () => {
@@ -22,6 +15,8 @@ const Splashscreen = () => {
   return (
     <LinearGradient
       colors={['#50C5AEA6', '#F6EF40A6']}
+      start={{x: 0, y: 0.5}}
+      end={{x: 0, y: 1}}
       style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Image source={require('../../../assets/images/logo.png')} />
     </LinearGradient>
