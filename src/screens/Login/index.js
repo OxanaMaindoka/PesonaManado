@@ -11,7 +11,7 @@ import {
 const Login = () => {
   const navigation = useNavigation();
   const handleLogin = () => {
-    navigation.navigate('Home');
+    navigation.navigate('TabNavigator');
   };
   const handleSignUp = () => {
     navigation.navigate('SignUp');
