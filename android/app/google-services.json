@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384803898422",
+    "project_id": "pesona-manado",
+    "storage_bucket": "pesona-manado.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384803898422:android:59e08bf44fe45a99fb8497",
+        "android_client_info": {
+          "package_name": "com.pesonamanado"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4RSKRK4Qiihk8oXD1R6-BwTZxY_8GCTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,12 +7,35 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import {useEffect, useState} from 'react';
+import {app} from '../../firebase/config';
 
 const Home = () => {
+  const [data, setData] = useState(null);
   const navigation = useNavigation();
   const handleCategoryPress = category => {
     navigation.navigate('TourList', {category});
   };
+  const getDestination = async () => {
+    try {
+      await firestore()
+        .collection('destinasi')
+        .get()
+        .then(values => {
+          const data = values.docs.map(item => {return item.data()})
+          console.log(data)
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDestination();
+  }, []);
+
+  console.log(data);
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
