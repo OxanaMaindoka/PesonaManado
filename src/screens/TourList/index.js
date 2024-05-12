@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -7,13 +8,36 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 const TourList = ({route}) => {
+  const [data, setData] = useState(null);
   const {category} = route.params;
   const navigation = useNavigation();
   const handleNavigation = item => {
-    navigation.navigate('Detail');
+    navigation.navigate('Detail', {id: item.id});
   };
+
+  const getDestination = async () => {
+    try {
+      const snapshot = await firestore()
+        .collection('destinasi')
+        .where('kategori', '==', category)
+        .get();
+      const normalize = snapshot.docs.map(item => {
+        return {
+          ...item.data(),
+          id: item.id,
+        };
+      });
+      setData(normalize);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getDestination();
+  }, []);
   return (
     <View style={styles.container}>
       <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.goBack()}>
@@ -24,20 +48,26 @@ const TourList = ({route}) => {
       </Text>
 
       <FlatList
-        data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+        data={data}
         contentContainerStyle={{rowGap: 20}}
-        renderItem={item => (
+        renderItem={({item}) => (
           <TouchableOpacity
-            onPress={() => handleNavigation()}
+            onPress={() => handleNavigation(item)}
             activeOpacity={0.8}
             style={styles.listContainer}>
             <Image
-              source={require('../../../assets/images/beach-list-1.png')}
-              style={{height: '100%', borderRadius: 10, objectFit: 'cover'}}
+              source={{uri: item.gambar}}
+              style={{
+                height: '100%',
+                width: 90,
+                borderRadius: 10,
+                objectFit: 'cover',
+                backgroundColor: 'grey',
+              }}
             />
             <View style={{gap: 5, flex: 1}}>
               <Text style={{fontWeight: 'bold', fontSize: 14, color: 'black'}}>
-                Pantai Pall
+                {item.nama}
               </Text>
               <View style={{flexDirection: 'row', gap: 10}}>
                 <Image
@@ -45,7 +75,7 @@ const TourList = ({route}) => {
                   style={{width: 20, objectFit: 'contain'}}
                 />
                 <Text style={{color: 'black', flexWrap: 'wrap', flex: 1}}>
-                  Likupang Timur, Minahasa Utara
+                  {item.alamat}
                 </Text>
               </View>
               <View style={{display: 'flex', flexDirection: 'row', gap: 10}}>
@@ -53,7 +83,7 @@ const TourList = ({route}) => {
                   source={require('../../../assets/images/star.png')}
                   style={{width: 20, objectFit: 'contain'}}
                 />
-                <Text style={{color: 'black'}}>4,6</Text>
+                <Text style={{color: 'black'}}>{item.rating}</Text>
               </View>
             </View>
           </TouchableOpacity>

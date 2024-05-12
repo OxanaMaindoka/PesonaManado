@@ -1,28 +1,53 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useCallback, useRef} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import BottomSheet, {BottomSheetView} from '@gorhom/bottom-sheet';
+import firestore from '@react-native-firebase/firestore';
 
 const Detail = ({route, navigation}) => {
+  const {id} = route.params;
+  const [data, setData] = useState(null);
   const bottomSheetRef = useRef(null);
+
   const handleSheetChanges = useCallback(index => {
     console.log('handleSheetChanges', index);
   }, []);
 
-  const handleDescription = item => {
-    navigation.navigate('Description', {item});
+  const handleDescription = () => {
+    navigation.navigate('Description', {data});
   };
+
+  const getDestinationDetail = async () => {
+    try {
+      const snapshot = await firestore().collection('destinasi').doc(id).get();
+      setData(snapshot.data());
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getDestinationDetail();
+  }, [id]);
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => navigation.goBack()}
-        style={{zIndex: 10, marginLeft: 20}}>
+        style={{
+          zIndex: 10,
+          marginLeft: 20,
+          backgroundColor: 'white',
+          width: 30,
+          alignItems: 'center',
+          paddingVertical: 5,
+          borderRadius: 10,
+        }}>
         <Image source={require('../../../assets/images/back.png')} />
       </TouchableOpacity>
 
       <Image
-        source={require('../../../assets/images/beach-main.png')}
+        source={{uri: data?.gambar}}
         style={{
           position: 'absolute',
           width: '100%',
@@ -46,7 +71,7 @@ const Detail = ({route, navigation}) => {
           {/* Header */}
           <View>
             <Text style={{color: 'gray', fontWeight: 'bold', fontSize: 18}}>
-              Batu Angus
+              {data?.nama}
             </Text>
             <View
               style={{
@@ -64,7 +89,7 @@ const Detail = ({route, navigation}) => {
                   style={{width: 20, objectFit: 'contain'}}
                 />
                 <Text style={{color: 'black', flexWrap: 'wrap'}}>
-                  Likupang Timur, Minahasa Utara
+                  {data?.alamat}
                 </Text>
               </View>
               <View style={{flexDirection: 'row', gap: 10}}>
@@ -72,7 +97,7 @@ const Detail = ({route, navigation}) => {
                   source={require('../../../assets/images/star.png')}
                   style={{width: 20, objectFit: 'contain'}}
                 />
-                <Text style={{color: 'black'}}>4,6</Text>
+                <Text style={{color: 'black'}}>{data?.rating}</Text>
               </View>
             </View>
           </View>
@@ -121,8 +146,9 @@ const Detail = ({route, navigation}) => {
               </View>
             </View>
             <TouchableOpacity
+              disabled={!data}
               activeOpacity={0.8}
-              onPress={() => handleDescription({category: 'beach'})}
+              onPress={() => handleDescription()}
               style={{
                 width: '100%',
                 paddingVertical: 15,
